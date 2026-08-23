@@ -1,0 +1,5075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<title>Radamand</title>
+
+<style>
+
+/* =========================================================
+   RADAMAND
+   VERSION 0.1
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #050505;
+    color: white;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    border: 0;
+    color: white;
+}
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#phone {
+    position: relative;
+
+    width: min(100vw, 430px);
+    height: min(100vh, 900px);
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(80, 120, 255, .35),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #0c1020,
+            #101010
+        );
+
+    transition:
+        background .5s ease,
+        filter .3s ease;
+}
+
+/* На больших экранах делаем корпус */
+
+@media (min-width: 600px) {
+
+    #phone {
+        width: 390px;
+        height: 844px;
+
+        border-radius: 38px;
+
+        border: 4px solid #191919;
+
+        box-shadow:
+            0 30px 80px rgba(0,0,0,.8),
+            inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+
+}
+
+/* =========================================================
+   LOCK SCREEN
+   ========================================================= */
+
+#lockScreen {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        65px
+        20px
+        35px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.15),
+            rgba(0,0,0,.65)
+        );
+
+    backdrop-filter: blur(3px);
+
+    transition:
+        transform .65s cubic-bezier(.7,0,.2,1),
+        opacity .4s ease;
+}
+
+#lockScreen.unlocked {
+
+    transform:
+        translateY(-100%);
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.lockTop {
+    text-align: center;
+}
+
+.lockIcon {
+    font-size: 23px;
+    margin-bottom: 14px;
+}
+
+#lockTime {
+
+    font-size: 66px;
+
+    font-weight: 200;
+
+    letter-spacing: -3px;
+
+    line-height: 1;
+}
+
+#lockDate {
+
+    margin-top: 10px;
+
+    font-size: 16px;
+
+    opacity: .8;
+}
+
+.lockBottom {
+    width: 100%;
+    text-align: center;
+}
+
+.swipeText {
+
+    font-size: 13px;
+
+    opacity: .65;
+
+    margin-bottom: 20px;
+}
+
+.swipeBar {
+
+    width: 115px;
+    height: 5px;
+
+    margin: auto;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.8);
+}
+
+/* =========================================================
+   STATUS BAR
+   ========================================================= */
+
+#statusBar {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 34px;
+
+    padding:
+        8px
+        15px
+        0;
+
+    z-index: 100;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 12px;
+
+    pointer-events: none;
+}
+
+.statusRight {
+
+    display: flex;
+
+    gap: 7px;
+
+    align-items: center;
+}
+
+#batteryIcon {
+    font-size: 13px;
+}
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+#home {
+
+    position: absolute;
+
+    inset: 0;
+
+    padding:
+        50px
+        20px
+        90px;
+
+    transition:
+        transform .35s ease;
+}
+
+#home.swiping {
+    transition: none;
+}
+
+/* =========================================================
+   WIDGET
+   ========================================================= */
+
+.widget {
+
+    width: 100%;
+
+    padding: 18px;
+
+    margin-top: 12px;
+
+    border-radius: 25px;
+
+    background:
+        rgba(255,255,255,.11);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    backdrop-filter: blur(25px);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.18);
+}
+
+.widgetTime {
+
+    font-size: 38px;
+
+    font-weight: 200;
+}
+
+.widgetDate {
+
+    margin-top: 5px;
+
+    opacity: .65;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   APP GRID
+   ========================================================= */
+
+#appGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 22px 15px;
+
+    margin-top: 30px;
+}
+
+.app {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    cursor: pointer;
+
+    animation:
+        appAppear .4s ease;
+}
+
+@keyframes appAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+.appIcon {
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 29px;
+
+    background:
+        rgba(255,255,255,.13);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.22);
+
+    backdrop-filter:
+        blur(15px);
+
+    transition:
+        transform .15s ease;
+}
+
+.app:active .appIcon {
+
+    transform:
+        scale(.82);
+
+}
+
+.appName {
+
+    width: 75px;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    font-size: 11px;
+
+    text-shadow:
+        0 1px 5px #000;
+}
+
+/* =========================================================
+   DOCK
+   ========================================================= */
+
+#dock {
+
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+
+    height: 75px;
+
+    border-radius: 26px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(25px);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-around;
+
+    z-index: 50;
+}
+
+.dockApp {
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease;
+}
+
+.dockApp:active {
+
+    transform:
+        scale(.8);
+
+}
+
+/* =========================================================
+   CONTROL CENTER
+   ========================================================= */
+
+#controlCenter {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: -100%;
+
+    height: 65%;
+
+    z-index: 300;
+
+    padding:
+        50px
+        18px
+        20px;
+
+    background:
+        rgba(15,15,18,.93);
+
+    backdrop-filter:
+        blur(35px);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius:
+        0 0 30px 30px;
+
+    transition:
+        top .4s cubic-bezier(.2,.8,.2,1);
+}
+
+#controlCenter.open {
+
+    top: 0;
+
+}
+
+.controlHeader {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom: 20px;
+}
+
+.controlTitle {
+
+    font-size: 24px;
+
+    font-weight: 600;
+}
+
+.controlGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+.controlButton {
+
+    min-height: 85px;
+
+    padding: 15px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,.1);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        transform .15s ease,
+        background .2s ease;
+}
+
+.controlButton:active {
+
+    transform:
+        scale(.95);
+
+}
+
+.controlButton.active {
+
+    background:
+        rgba(70,120,255,.8);
+
+}
+
+.controlEmoji {
+
+    font-size: 25px;
+
+    margin-bottom: 10px;
+}
+
+.controlLabel {
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   APP WINDOW
+   ========================================================= */
+
+.appWindow {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 200;
+
+    display: none;
+
+    flex-direction: column;
+
+    background:
+        #090909;
+
+    animation:
+        windowOpen .25s ease;
+}
+
+.appWindow.open {
+
+    display: flex;
+
+}
+
+@keyframes windowOpen {
+
+    from {
+        opacity: 0;
+        transform:
+            scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            scale(1);
+    }
+
+}
+
+.appHeader {
+
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0 18px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+    flex-shrink: 0;
+}
+
+.backButton {
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    margin-right: 12px;
+}
+
+.appWindowTitle {
+
+    font-size: 19px;
+
+    font-weight: 600;
+}
+
+.appContent {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 20px;
+}
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.settingGroupTitle {
+
+    font-size: 13px;
+
+    opacity: .5;
+
+    margin:
+        10px 5px;
+}
+
+.settingCard {
+
+    background:
+        #171717;
+
+    border:
+        1px solid
+        rgba(255,255,255,.05);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 20px;
+}
+
+.settingItem {
+
+    min-height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        12px 17px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+    cursor: pointer;
+}
+
+.settingItem:last-child {
+
+    border-bottom: 0;
+
+}
+
+.settingLeft {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.settingEmoji {
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    font-size: 20px;
+}
+
+.settingText {
+
+    font-size: 14px;
+}
+
+.settingSub {
+
+    font-size: 11px;
+
+    opacity: .45;
+
+    margin-top: 3px;
+}
+
+/* =========================================================
+   WALLPAPER
+   ========================================================= */
+
+.wallpaperGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 12px;
+}
+
+.wallpaper {
+
+    height: 130px;
+
+    border-radius: 20px;
+
+    border:
+        2px solid
+        transparent;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        border .2s ease;
+}
+
+.wallpaper:active {
+
+    transform:
+        scale(.96);
+
+}
+
+.wallpaper.selected {
+
+    border:
+        2px solid
+        white;
+}
+
+/* =========================================================
+   RANDPLUS
+   ========================================================= */
+
+.storeSearch {
+
+    width: 100%;
+
+    height: 48px;
+
+    border-radius: 16px;
+
+    border: 0;
+
+    outline: none;
+
+    padding:
+        0 16px;
+
+    background:
+        #191919;
+
+    color: white;
+
+    margin-bottom: 18px;
+
+    font-size: 14px;
+}
+
+.storeApp {
+
+    background:
+        #171717;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    border-radius: 22px;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.storeIcon {
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 29px;
+
+    background:
+        rgba(255,255,255,.1);
+
+    flex-shrink: 0;
+}
+
+.storeInfo {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+.storeName {
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+.storeDescription {
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    opacity: .5;
+
+    line-height: 1.4;
+}
+
+.storeButton {
+
+    min-width: 70px;
+
+    padding:
+        9px 12px;
+
+    border-radius: 13px;
+
+    background:
+        #fff;
+
+    color:
+        #111;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.storeButton.installed {
+
+    background:
+        #242424;
+
+    color:
+        #aaa;
+}
+
+.storeButton.installing {
+
+    background:
+        #315fff;
+
+    color:
+        white;
+}
+
+/* =========================================================
+   INSTALLATION SCREEN
+   ========================================================= */
+
+#installOverlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 800;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(0,0,0,.75);
+
+    backdrop-filter:
+        blur(15px);
+}
+
+#installOverlay.show {
+
+    display: flex;
+
+}
+
+.installBox {
+
+    width: 85%;
+
+    padding: 28px;
+
+    border-radius: 28px;
+
+    background:
+        #181818;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.5);
+}
+
+.installIcon {
+
+    width: 75px;
+    height: 75px;
+
+    border-radius: 22px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 38px;
+
+    margin:
+        0 auto 18px;
+
+    background:
+        rgba(255,255,255,.1);
+}
+
+.installName {
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+}
+
+.installStatus {
+
+    font-size: 13px;
+
+    opacity: .5;
+
+    margin-bottom: 20px;
+}
+
+.progress {
+
+    height: 7px;
+
+    width: 100%;
+
+    background:
+        #2a2a2a;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progressBar {
+
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #315fff,
+            #8b5cff
+        );
+
+    transition:
+        width .25s linear;
+}
+
+.progressPercent {
+
+    margin-top: 10px;
+
+    font-size: 12px;
+
+    opacity: .5;
+}
+
+/* =========================================================
+   CODE EDITOR
+   ========================================================= */
+
+#codeEditor {
+
+    width: 100%;
+
+    min-height: 450px;
+
+    resize: none;
+
+    outline: none;
+
+    border: 0;
+
+    border-radius: 18px;
+
+    padding: 17px;
+
+    background:
+        #050505;
+
+    color:
+        #70ffb0;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    user-select: text;
+}
+
+.codeToolbar {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.codeButton {
+
+    padding:
+        10px 14px;
+
+    border-radius: 12px;
+
+    background:
+        #1c1c1c;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   QLINUX
+   ========================================================= */
+
+.chatList {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.chat {
+
+    padding: 14px;
+
+    border-radius: 18px;
+
+    background:
+        #171717;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+}
+
+.chatAvatar {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #315fff,
+            #7d45ff
+        );
+
+    font-size: 20px;
+}
+
+.chatName {
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.chatLast {
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    opacity: .4;
+}
+
+/* =========================================================
+   ROBOTALIM
+   ========================================================= */
+
+.robotAvatar {
+
+    width: 90px;
+    height: 90px;
+
+    border-radius: 28px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    margin:
+        10px auto 20px;
+
+    font-size: 48px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #315fff,
+            #9d4dff
+        );
+
+    box-shadow:
+        0 15px 50px
+        rgba(70,80,255,.3);
+}
+
+.robotMessage {
+
+    padding: 15px;
+
+    border-radius: 18px;
+
+    background:
+        #171717;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+
+    margin-bottom: 15px;
+}
+
+.robotInputRow {
+
+    display: flex;
+
+    gap: 8px;
+
+    position: sticky;
+
+    bottom: 0;
+
+    background:
+        #090909;
+
+    padding-top: 10px;
+}
+
+.robotInput {
+
+    flex: 1;
+
+    height: 48px;
+
+    border: 0;
+
+    outline: none;
+
+    border-radius: 16px;
+
+    padding:
+        0 15px;
+
+    background:
+        #1b1b1b;
+
+    color: white;
+
+    user-select: text;
+}
+
+.robotSend {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 16px;
+
+    background:
+        #315fff;
+
+    cursor: pointer;
+
+}
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+.mapBox {
+
+    height: 600px;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    background:
+        #101722;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.mapWorld {
+
+    width: 180%;
+
+    height: 100%;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            #315a7d 0%,
+            #17384c 30%,
+            #08151d 70%
+        );
+
+    border-radius: 50%;
+
+    box-shadow:
+        inset -50px -20px 80px
+        rgba(0,0,0,.6);
+
+    position: relative;
+}
+
+.mapMarker {
+
+    position: absolute;
+
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    background:
+        #ff4655;
+
+    box-shadow:
+        0 0 15px
+        rgba(255,70,85,.9);
+
+}
+
+/* =========================================================
+   FILES
+   ========================================================= */
+
+.fileItem {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    background:
+        #171717;
+
+    border-radius: 17px;
+
+    margin-bottom: 9px;
+}
+
+.fileIcon {
+
+    font-size: 28px;
+}
+
+/* =========================================================
+   BROWSER
+   ========================================================= */
+
+.browserBar {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.browserInput {
+
+    flex: 1;
+
+    height: 45px;
+
+    border: 0;
+
+    outline: none;
+
+    border-radius: 14px;
+
+    background:
+        #181818;
+
+    color: white;
+
+    padding:
+        0 14px;
+
+    user-select: text;
+}
+
+.browserGo {
+
+    width: 45px;
+
+    border-radius: 14px;
+
+    background:
+        #315fff;
+
+    cursor: pointer;
+}
+
+.browserPage {
+
+    min-height: 450px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background:
+        #151515;
+}
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+#notificationContainer {
+
+    position: absolute;
+
+    top: 45px;
+
+    left: 15px;
+    right: 15px;
+
+    z-index: 700;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    pointer-events: none;
+}
+
+.notification {
+
+    padding: 14px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(30,30,30,.92);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,0,0,.3);
+
+    animation:
+        notificationIn .35s ease;
+
+    pointer-events: auto;
+}
+
+@keyframes notificationIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(-20px)
+            scale(.95);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+.notificationTitle {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+.notificationText {
+
+    font-size: 12px;
+
+    opacity: .6;
+
+    margin-top: 4px;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+#toast {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 105px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    z-index: 900;
+
+    padding:
+        12px 17px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(20,20,20,.94);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+#toast.show {
+
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+}
+
+/* =========================================================
+   HOME INDICATOR
+   ========================================================= */
+
+#homeIndicator {
+
+    position: absolute;
+
+    bottom: 5px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width: 100px;
+
+    height: 4px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.8);
+
+    z-index: 400;
+}
+
+/* =========================================================
+   PAGE DOTS
+   ========================================================= */
+
+#pageDots {
+
+    position: absolute;
+
+    bottom: 96px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    display: flex;
+
+    gap: 6px;
+
+    z-index: 40;
+}
+
+.pageDot {
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.35);
+
+}
+
+.pageDot.active {
+
+    background:
+        white;
+
+}
+
+/* =========================================================
+   INSTALLATION ANIMATION
+   ========================================================= */
+
+.installPulse {
+
+    animation:
+        installPulse 1.2s infinite;
+}
+
+@keyframes installPulse {
+
+    0% {
+        transform:
+            scale(1);
+    }
+
+    50% {
+        transform:
+            scale(1.06);
+    }
+
+    100% {
+        transform:
+            scale(1);
+    }
+
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-height: 700px) {
+
+    .widget {
+        padding: 12px;
+    }
+
+    .widgetTime {
+        font-size: 30px;
+    }
+
+    #appGrid {
+        gap: 14px 10px;
+        margin-top: 18px;
+    }
+
+    .appIcon {
+        width: 52px;
+        height: 52px;
+        font-size: 24px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="phone">
+
+    <!-- =====================================================
+         STATUS BAR
+         ===================================================== -->
+
+    <div id="statusBar">
+
+        <span id="statusTime">
+            00:00
+        </span>
+
+        <div class="statusRight">
+
+            <span id="networkIcon">
+                📶
+            </span>
+
+            <span>
+                🔋
+            </span>
+
+            <span id="batteryIcon">
+                100%
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HOME SCREEN
+         ===================================================== -->
+
+    <main id="home">
+
+        <section class="widget">
+
+            <div
+                class="widgetTime"
+                id="widgetTime">
+                00:00
+            </div>
+
+            <div
+                class="widgetDate"
+                id="widgetDate">
+                Загрузка...
+            </div>
+
+        </section>
+
+
+        <section id="appGrid">
+
+            <!-- Приложения появляются JS -->
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         DOCK
+         ===================================================== -->
+
+    <div id="dock">
+
+        <div
+            class="dockApp"
+            onclick="openApp('browser')">
+            🌐
+        </div>
+
+        <div
+            class="dockApp"
+            onclick="openApp('qlinux')">
+            💬
+        </div>
+
+        <div
+            class="dockApp"
+            onclick="openApp('code')">
+            ⌨️
+        </div>
+
+        <div
+            class="dockApp"
+            onclick="openApp('settings')">
+            ⚙️
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGE DOTS
+         ===================================================== -->
+
+    <div id="pageDots">
+
+        <div
+            class="pageDot active">
+        </div>
+
+        <div
+            class="pageDot">
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HOME INDICATOR
+         ===================================================== -->
+
+    <div id="homeIndicator"></div>
+
+
+    <!-- =====================================================
+         LOCK SCREEN
+         ===================================================== -->
+
+    <section id="lockScreen">
+
+        <div class="lockTop">
+
+            <div class="lockIcon">
+                🔒
+            </div>
+
+            <div id="lockTime">
+                00:00
+            </div>
+
+            <div id="lockDate">
+                Загрузка...
+            </div>
+
+        </div>
+
+        <div class="lockBottom">
+
+            <div class="swipeText">
+                Проведи вверх, чтобы разблокировать
+            </div>
+
+            <div class="swipeBar"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTROL CENTER
+         ===================================================== -->
+
+    <section id="controlCenter">
+
+        <div class="controlHeader">
+
+            <div class="controlTitle">
+                Быстрые настройки
+            </div>
+
+            <button
+                onclick="closeControlCenter()"
+                style="
+                    width:40px;
+                    height:40px;
+                    border-radius:14px;
+                    background:#222;
+                    cursor:pointer;
+                ">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="controlGrid">
+
+            <div
+                class="controlButton active"
+                id="wifiButton"
+                onclick="toggleWifi()">
+
+                <div class="controlEmoji">
+                    📶
+                </div>
+
+                <div class="controlLabel">
+                    Wi-Fi
+                </div>
+
+            </div>
+
+
+            <div
+                class="controlButton active"
+                id="soundButton"
+                onclick="toggleSound()">
+
+                <div class="controlEmoji">
+                    🔊
+                </div>
+
+                <div class="controlLabel">
+                    Звук
+                </div>
+
+            </div>
+
+
+            <div
+                class="controlButton"
+                id="darkButton"
+                onclick="toggleDarkMode()">
+
+                <div class="controlEmoji">
+                    🌙
+                </div>
+
+                <div class="controlLabel">
+                    Тёмная тема
+                </div>
+
+            </div>
+
+
+            <div
+                class="controlButton"
+                onclick="showToast('Режим полёта пока недоступен')">
+
+                <div class="controlEmoji">
+                    ✈️
+                </div>
+
+                <div class="controlLabel">
+                    Авиарежим
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         APPLICATION WINDOWS
+         ===================================================== -->
+
+
+    <!-- SETTINGS -->
+
+    <section
+        class="appWindow"
+        id="app-settings">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                Настройки
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="settingGroupTitle">
+                ПЕРСОНАЛИЗАЦИЯ
+            </div>
+
+            <div class="settingCard">
+
+                <div class="settingItem">
+
+                    <div class="settingLeft">
+
+                        <div class="settingEmoji">
+                            🖼️
+                        </div>
+
+                        <div>
+
+                            <div class="settingText">
+                                Обои
+                            </div>
+
+                            <div class="settingSub">
+                                Изменить фон Radamand
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="wallpaperGrid"
+                id="wallpaperGrid">
+
+                <div
+                    class="wallpaper"
+                    style="
+                        background:
+                        linear-gradient(
+                            135deg,
+                            #080808,
+                            #363636
+                        );
+                    "
+                    onclick="
+                        setWallpaper(
+                        'linear-gradient(135deg,#080808,#363636)'
+                        )
+                    ">
+                </div>
+
+
+                <div
+                    class="wallpaper"
+                    style="
+                        background:
+                        linear-gradient(
+                            135deg,
+                            #001b44,
+                            #315fff
+                        );
+                    "
+                    onclick="
+                        setWallpaper(
+                        'linear-gradient(135deg,#001b44,#315fff)'
+                        )
+                    ">
+                </div>
+
+
+                <div
+                    class="wallpaper"
+                    style="
+                        background:
+                        linear-gradient(
+                            135deg,
+                            #210039,
+                            #a44cff
+                        );
+                    "
+                    onclick="
+                        setWallpaper(
+                        'linear-gradient(135deg,#210039,#a44cff)'
+                        )
+                    ">
+                </div>
+
+
+                <div
+                    class="wallpaper"
+                    style="
+                        background:
+                        linear-gradient(
+                            135deg,
+                            #003629,
+                            #00a87a
+                        );
+                    "
+                    onclick="
+                        setWallpaper(
+                        'linear-gradient(135deg,#003629,#00a87a)'
+                        )
+                    ">
+                </div>
+
+
+                <div
+                    class="wallpaper"
+                    style="
+                        background:
+                        linear-gradient(
+                            135deg,
+                            #350000,
+                            #ff3b30
+                        );
+                    "
+                    onclick="
+                        setWallpaper(
+                        'linear-gradient(135deg,#350000,#ff3b30)'
+                        )
+                    ">
+                </div>
+
+
+                <div
+                    class="wallpaper"
+                    style="
+                        background:
+                        radial-gradient(
+                            circle,
+                            #304f70,
+                            #02060b
+                        );
+                    "
+                    onclick="
+                        setWallpaper(
+                        'radial-gradient(circle,#304f70,#02060b)'
+                        )
+                    ">
+                </div>
+
+            </div>
+
+
+            <div class="settingGroupTitle">
+                СИСТЕМА
+            </div>
+
+
+            <div class="settingCard">
+
+                <div
+                    class="settingItem"
+                    onclick="toggleSound()">
+
+                    <div class="settingLeft">
+
+                        <div class="settingEmoji">
+                            🔊
+                        </div>
+
+                        <div>
+
+                            <div class="settingText">
+                                Звуки
+                            </div>
+
+                            <div
+                                class="settingSub"
+                                id="soundStatus">
+                                Включены
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <span>
+                        ›
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="settingItem"
+                    onclick="toggleDarkMode()">
+
+                    <div class="settingLeft">
+
+                        <div class="settingEmoji">
+                            🌙
+                        </div>
+
+                        <div>
+
+                            <div class="settingText">
+                                Тёмная тема
+                            </div>
+
+                            <div
+                                class="settingSub"
+                                id="darkStatus">
+                                Включена
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <span>
+                        ›
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="settingItem"
+                    onclick="
+                        showToast(
+                        'Блокировка PIN появится позже'
+                        )
+                    ">
+
+                    <div class="settingLeft">
+
+                        <div class="settingEmoji">
+                            🔒
+                        </div>
+
+                        <div>
+
+                            <div class="settingText">
+                                Безопасность
+                            </div>
+
+                            <div class="settingSub">
+                                PIN-код
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <span>
+                        ›
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="settingGroupTitle">
+                RADAMAND
+            </div>
+
+
+            <div class="settingCard">
+
+                <div class="settingItem">
+
+                    <div class="settingLeft">
+
+                        <div class="settingEmoji">
+                            📱
+                        </div>
+
+                        <div>
+
+                            <div class="settingText">
+                                Версия
+                            </div>
+
+                            <div class="settingSub">
+                                Radamand 0.1
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RANDPLUS -->
+
+    <section
+        class="appWindow"
+        id="app-store">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                RandPlus
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <input
+                class="storeSearch"
+                id="storeSearch"
+                placeholder="Поиск приложения..."
+                oninput="filterStore()">
+
+
+            <div id="storeList">
+
+                <!-- генерируется JS -->
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CODKEY+ -->
+
+    <section
+        class="appWindow"
+        id="app-code">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                CodKey+
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="codeToolbar">
+
+                <button
+                    class="codeButton"
+                    onclick="saveCode()">
+                    💾 Сохранить
+                </button>
+
+                <button
+                    class="codeButton"
+                    onclick="clearCode()">
+                    🗑 Очистить
+                </button>
+
+            </div>
+
+
+            <textarea
+                id="codeEditor"
+                spellcheck="false"
+                placeholder="// CodKey+
+ // Напиши свой код здесь...
+"></textarea>
+
+        </div>
+
+    </section>
+
+
+    <!-- ROBOTALIM -->
+
+    <section
+        class="appWindow"
+        id="app-robot">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                Robotalim
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="robotAvatar">
+                🤖
+            </div>
+
+            <div
+                class="robotMessage"
+                id="robotMessage">
+
+                Привет! Я Robotalim — помощник
+                операционной системы Radamand.
+                <br><br>
+                Можешь написать мне команду.
+
+            </div>
+
+
+            <div class="robotInputRow">
+
+                <input
+                    class="robotInput"
+                    id="robotInput"
+                    placeholder="Напиши сообщение...">
+
+                <button
+                    class="robotSend"
+                    onclick="sendRobotMessage()">
+                    ➤
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QLINUX -->
+
+    <section
+        class="appWindow"
+        id="app-qlinux">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                Qlinux
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="chatList">
+
+                <div
+                    class="chat"
+                    onclick="
+                        showToast(
+                        'Чат будет подключён к серверу'
+                        )
+                    ">
+
+                    <div class="chatAvatar">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <div class="chatName">
+                            Избранное
+                        </div>
+
+                        <div class="chatLast">
+                            Личные сообщения
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="chat"
+                    onclick="
+                        showToast(
+                        'Новый чат будет добавлен позже'
+                        )
+                    ">
+
+                    <div class="chatAvatar">
+                        ＋
+                    </div>
+
+                    <div>
+
+                        <div class="chatName">
+                            Новый чат
+                        </div>
+
+                        <div class="chatLast">
+                            Создать разговор
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- BANANACIPR -->
+
+    <section
+        class="appWindow"
+        id="app-map">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                BananaCipr
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="mapBox">
+
+                <div class="mapWorld">
+
+                    <span
+                        class="mapMarker"
+                        style="
+                            left:42%;
+                            top:37%;
+                        ">
+                    </span>
+
+                    <span
+                        class="mapMarker"
+                        style="
+                            left:49%;
+                            top:48%;
+                        ">
+                    </span>
+
+                    <span
+                        class="mapMarker"
+                        style="
+                            left:55%;
+                            top:42%;
+                        ">
+                    </span>
+
+                    <span
+                        class="mapMarker"
+                        style="
+                            left:65%;
+                            top:53%;
+                        ">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILES -->
+
+    <section
+        class="appWindow"
+        id="app-files">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                Files
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="fileItem">
+
+                <div class="fileIcon">
+                    📁
+                </div>
+
+                <div>
+                    Projects
+                </div>
+
+            </div>
+
+
+            <div class="fileItem">
+
+                <div class="fileIcon">
+                    📁
+                </div>
+
+                <div>
+                    Downloads
+                </div>
+
+            </div>
+
+
+            <div class="fileItem">
+
+                <div class="fileIcon">
+                    🖼️
+                </div>
+
+                <div>
+                    Wallpapers
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- BROWSER -->
+
+    <section
+        class="appWindow"
+        id="app-browser">
+
+        <header class="appHeader">
+
+            <button
+                class="backButton"
+                onclick="closeApp()">
+                ‹
+            </button>
+
+            <div class="appWindowTitle">
+                Browser
+            </div>
+
+        </header>
+
+
+        <div class="appContent">
+
+            <div class="browserBar">
+
+                <input
+                    class="browserInput"
+                    id="browserInput"
+                    placeholder="Введите адрес или запрос...">
+
+                <button
+                    class="browserGo"
+                    onclick="openBrowser()">
+                    →
+                </button>
+
+            </div>
+
+
+            <div
+                class="browserPage"
+                id="browserPage">
+
+                <h2>
+                    🌐 Radamand Browser
+                </h2>
+
+                <p
+                    style="
+                        margin-top:10px;
+                        opacity:.5;
+                    ">
+
+                    Введи адрес сайта выше.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INSTALL OVERLAY
+         ===================================================== -->
+
+    <div id="installOverlay">
+
+        <div class="installBox">
+
+            <div
+                class="installIcon installPulse"
+                id="installIcon">
+                📦
+            </div>
+
+            <div
+                class="installName"
+                id="installName">
+                Приложение
+            </div>
+
+            <div
+                class="installStatus"
+                id="installStatus">
+                Подготовка...
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progressBar"
+                    id="progressBar">
+                </div>
+
+            </div>
+
+            <div
+                class="progressPercent"
+                id="progressPercent">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NOTIFICATIONS
+         ===================================================== -->
+
+    <div id="notificationContainer"></div>
+
+
+    <!-- =====================================================
+         TOAST
+         ===================================================== -->
+
+    <div id="toast"></div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   RADAMAND CORE
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   APPLICATION DATABASE
+   --------------------------------------------------------- */
+
+const applications = {
+
+    codkey: {
+
+        id: "codkey",
+
+        name: "CodKey+",
+
+        icon: "⌨️",
+
+        description:
+            "Редактор кода и сохранение проектов.",
+
+        installed: true,
+
+        window: "code"
+
+    },
+
+    robot: {
+
+        id: "robot",
+
+        name: "Robotalim",
+
+        icon: "🤖",
+
+        description:
+            "AI-помощник операционной системы Radamand.",
+
+        installed: true,
+
+        window: "robot"
+
+    },
+
+    qlinux: {
+
+        id: "qlinux",
+
+        name: "Qlinux",
+
+        icon: "💬",
+
+        description:
+            "Мессенджер с чатами и сообщениями.",
+
+        installed: true,
+
+        window: "qlinux"
+
+    },
+
+    banana: {
+
+        id: "banana",
+
+        name: "BananaCipr",
+
+        icon: "🌍",
+
+        description:
+            "Карта мира и информация о компаниях.",
+
+        installed: true,
+
+        window: "map"
+
+    },
+
+    files: {
+
+        id: "files",
+
+        name: "Radamand Files",
+
+        icon: "📁",
+
+        description:
+            "Файловый менеджер.",
+
+        installed: true,
+
+        window: "files"
+
+    },
+
+    browser: {
+
+        id: "browser",
+
+        name: "Radamand Browser",
+
+        icon: "🌐",
+
+        description:
+            "Браузер внутри Radamand.",
+
+        installed: true,
+
+        window: "browser"
+
+    }
+
+};
+
+
+/* ---------------------------------------------------------
+   STORAGE
+   --------------------------------------------------------- */
+
+const STORAGE_KEY =
+    "radamand_state_v01";
+
+
+let state = {
+
+    installed: {},
+
+    wallpaper: null,
+
+    sound: true,
+
+    dark: true,
+
+    wifi: true,
+
+    locked: true
+
+};
+
+
+function loadState() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if (saved) {
+
+            const parsed =
+                JSON.parse(saved);
+
+            state = {
+                ...state,
+                ...parsed
+            };
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Radamand storage error:",
+            error
+        );
+
+    }
+
+}
+
+
+function saveState() {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(state)
+        );
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Cannot save state:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   INITIAL INSTALLATION
+   --------------------------------------------------------- */
+
+function initializeApplications() {
+
+    const defaults = [
+        "codkey",
+        "robot",
+        "qlinux",
+        "banana",
+        "files",
+        "browser"
+    ];
+
+    if (
+        !state.installed ||
+        Object.keys(state.installed).length === 0
+    ) {
+
+        state.installed = {};
+
+        defaults.forEach(id => {
+
+            state.installed[id] = true;
+
+        });
+
+        saveState();
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+function updateClock() {
+
+    const now =
+        new Date();
+
+
+    const time =
+        now.toLocaleTimeString(
+            "ru-RU",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+
+    const date =
+        now.toLocaleDateString(
+            "ru-RU",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            }
+        );
+
+
+    document.getElementById(
+        "lockTime"
+    ).textContent = time;
+
+
+    document.getElementById(
+        "statusTime"
+    ).textContent = time;
+
+
+    document.getElementById(
+        "widgetTime"
+    ).textContent = time;
+
+
+    document.getElementById(
+        "lockDate"
+    ).textContent =
+        capitalize(date);
+
+
+    document.getElementById(
+        "widgetDate"
+    ).textContent =
+        capitalize(date);
+
+}
+
+
+function capitalize(text) {
+
+    if (!text) return "";
+
+    return text.charAt(0).toUpperCase()
+        + text.slice(1);
+
+}
+
+
+setInterval(
+    updateClock,
+    1000
+);
+
+updateClock();
+
+
+/* =========================================================
+   BATTERY
+   ========================================================= */
+
+async function loadBattery() {
+
+    if (
+        "getBattery"
+        in navigator
+    ) {
+
+        try {
+
+            const battery =
+                await navigator.getBattery();
+
+
+            function updateBattery() {
+
+                const percent =
+                    Math.round(
+                        battery.level * 100
+                    );
+
+
+                document.getElementById(
+                    "batteryIcon"
+                ).textContent =
+                    percent + "%";
+
+            }
+
+
+            battery.addEventListener(
+                "levelchange",
+                updateBattery
+            );
+
+
+            updateBattery();
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Battery API unavailable"
+            );
+
+        }
+
+    }
+
+}
+
+
+loadBattery();
+
+
+/* =========================================================
+   AUDIO ENGINE
+   ========================================================= */
+
+let audioContext = null;
+
+
+function getAudioContext() {
+
+    if (!state.sound) {
+
+        return null;
+
+    }
+
+
+    if (!audioContext) {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+
+            return null;
+
+        }
+
+
+        audioContext =
+            new AudioContext();
+
+    }
+
+
+    if (
+        audioContext.state ===
+        "suspended"
+    ) {
+
+        audioContext.resume();
+
+    }
+
+
+    return audioContext;
+
+}
+
+
+function playSound(
+    frequency = 500,
+    duration = .06,
+    volume = .025
+) {
+
+    if (!state.sound) {
+
+        return;
+
+    }
+
+
+    const ctx =
+        getAudioContext();
+
+
+    if (!ctx) {
+
+        return;
+
+    }
+
+
+    const oscillator =
+        ctx.createOscillator();
+
+
+    const gain =
+        ctx.createGain();
+
+
+    oscillator.type =
+        "sine";
+
+
+    oscillator.frequency.value =
+        frequency;
+
+
+    gain.gain.setValueAtTime(
+        volume,
+        ctx.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        ctx.currentTime + duration
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(ctx.destination);
+
+
+    oscillator.start();
+
+    oscillator.stop(
+        ctx.currentTime + duration
+    );
+
+}
+
+
+/* =========================================================
+   WALLPAPER
+   ========================================================= */
+
+function setWallpaper(
+    background
+) {
+
+    state.wallpaper =
+        background;
+
+
+    applyWallpaper();
+
+    saveState();
+
+    playSound(
+        650,
+        .08
+    );
+
+    showToast(
+        "Обои изменены"
+    );
+
+}
+
+
+function applyWallpaper() {
+
+    const phone =
+        document.getElementById(
+            "phone"
+        );
+
+
+    if (state.wallpaper) {
+
+        phone.style.background =
+            state.wallpaper;
+
+    }
+
+}
+
+
+applyWallpaper();
+
+
+/* =========================================================
+   LOCK SCREEN
+   ========================================================= */
+
+const lockScreen =
+    document.getElementById(
+        "lockScreen"
+    );
+
+
+let lockStartY = 0;
+
+
+lockScreen.addEventListener(
+    "touchstart",
+    event => {
+
+        lockStartY =
+            event.touches[0].clientY;
+
+    }
+);
+
+
+lockScreen.addEventListener(
+    "touchend",
+    event => {
+
+        const endY =
+            event.changedTouches[0].clientY;
+
+
+        const distance =
+            lockStartY - endY;
+
+
+        if (distance > 80) {
+
+            unlockPhone();
+
+        }
+
+    }
+);
+
+
+lockScreen.addEventListener(
+    "click",
+    () => {
+
+        unlockPhone();
+
+    }
+);
+
+
+function unlockPhone() {
+
+    state.locked =
+        false;
+
+    lockScreen.classList.add(
+        "unlocked"
+    );
+
+    playSound(
+        700,
+        .09
+    );
+
+    saveState();
+
+}
+
+
+function lockPhone() {
+
+    state.locked =
+        true;
+
+    lockScreen.classList.remove(
+        "unlocked"
+    );
+
+    saveState();
+
+}
+
+
+if (!state.locked) {
+
+    lockScreen.classList.add(
+        "unlocked"
+    );
+
+}
+
+
+/* =========================================================
+   APPLICATION RENDERER
+   ========================================================= */
+
+function renderHome() {
+
+    const grid =
+        document.getElementById(
+            "appGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    Object.values(applications)
+        .forEach(app => {
+
+            if (
+                state.installed[app.id]
+            ) {
+
+                createHomeIcon(
+                    app,
+                    grid
+                );
+
+            }
+
+        });
+
+}
+
+
+function createHomeIcon(
+    app,
+    container
+) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        "app";
+
+
+    element.innerHTML = `
+
+        <div class="appIcon">
+            ${app.icon}
+        </div>
+
+        <div class="appName">
+            ${app.name}
+        </div>
+
+    `;
+
+
+    element.addEventListener(
+        "click",
+        () => {
+
+            playSound(
+                550,
+                .05
+            );
+
+            openApp(
+                app.window
+            );
+
+        }
+    );
+
+
+    container.appendChild(
+        element
+    );
+
+}
+
+
+/* =========================================================
+   OPEN APP
+   ========================================================= */
+
+function openApp(
+    appName
+) {
+
+    closeAllWindows();
+
+
+    const window =
+        document.getElementById(
+            "app-" + appName
+        );
+
+
+    if (!window) {
+
+        showToast(
+            "Приложение пока недоступно"
+        );
+
+        return;
+
+    }
+
+
+    window.classList.add(
+        "open"
+    );
+
+
+    playSound(
+        480,
+        .05
+    );
+
+
+    if (
+        appName === "store"
+    ) {
+
+        renderStore();
+
+    }
+
+
+}
+
+
+/* =========================================================
+   CLOSE APP
+   ========================================================= */
+
+function closeApp() {
+
+    closeAllWindows();
+
+    playSound(
+        350,
+        .04
+    );
+
+}
+
+
+function closeAllWindows() {
+
+    document
+        .querySelectorAll(
+            ".appWindow"
+        )
+        .forEach(window => {
+
+            window.classList.remove(
+                "open"
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   CONTROL CENTER
+   ========================================================= */
+
+function openControlCenter() {
+
+    document
+        .getElementById(
+            "controlCenter"
+        )
+        .classList.add(
+            "open"
+        );
+
+    playSound(
+        420,
+        .05
+    );
+
+}
+
+
+function closeControlCenter() {
+
+    document
+        .getElementById(
+            "controlCenter"
+        )
+        .classList.remove(
+            "open"
+        );
+
+}
+
+
+/* Swipe from top */
+
+let screenTouchStart = 0;
+
+
+document
+    .getElementById("phone")
+    .addEventListener(
+        "touchstart",
+        event => {
+
+            if (
+                event.target.closest(
+                    ".appWindow"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            screenTouchStart =
+                event.touches[0].clientY;
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+document
+    .getElementById("phone")
+    .addEventListener(
+        "touchend",
+        event => {
+
+            const end =
+                event.changedTouches[0].clientY;
+
+
+            const distance =
+                end - screenTouchStart;
+
+
+            if (
+                screenTouchStart < 80 &&
+                distance > 80
+            ) {
+
+                openControlCenter();
+
+            }
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+/* =========================================================
+   WIFI
+   ========================================================= */
+
+function toggleWifi() {
+
+    state.wifi =
+        !state.wifi;
+
+
+    const button =
+        document.getElementById(
+            "wifiButton"
+        );
+
+
+    button.classList.toggle(
+        "active",
+        state.wifi
+    );
+
+
+    document.getElementById(
+        "networkIcon"
+    ).textContent =
+        state.wifi
+            ? "📶"
+            : "❌";
+
+
+    saveState();
+
+    playSound(
+        500,
+        .06
+    );
+
+    showToast(
+        state.wifi
+            ? "Wi-Fi включён"
+            : "Wi-Fi выключен"
+    );
+
+}
+
+
+/* =========================================================
+   SOUND
+   ========================================================= */
+
+function toggleSound() {
+
+    state.sound =
+        !state.sound;
+
+
+    document.getElementById(
+        "soundButton"
+    ).classList.toggle(
+        "active",
+        state.sound
+    );
+
+
+    document.getElementById(
+        "soundStatus"
+    ).textContent =
+        state.sound
+            ? "Включены"
+            : "Выключены";
+
+
+    saveState();
+
+
+    if (state.sound) {
+
+        playSound(
+            700,
+            .08
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+function toggleDarkMode() {
+
+    state.dark =
+        !state.dark;
+
+
+    const button =
+        document.getElementById(
+            "darkButton"
+        );
+
+
+    button.classList.toggle(
+        "active",
+        state.dark
+    );
+
+
+    document.getElementById(
+        "darkStatus"
+    ).textContent =
+        state.dark
+            ? "Включена"
+            : "Выключена";
+
+
+    const phone =
+        document.getElementById(
+            "phone"
+        );
+
+
+    if (!state.dark) {
+
+        phone.style.filter =
+            "brightness(1.12)";
+
+    }
+
+    else {
+
+        phone.style.filter =
+            "brightness(.9)";
+
+    }
+
+
+    saveState();
+
+}
+
+
+/* =========================================================
+   RANDPLUS
+   ========================================================= */
+
+function renderStore() {
+
+    const list =
+        document.getElementById(
+            "storeList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    Object.values(
+        applications
+    ).forEach(app => {
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+
+        card.className =
+            "storeApp";
+
+
+        const installed =
+            state.installed[
+                app.id
+            ] === true;
+
+
+        card.innerHTML = `
+
+            <div class="storeIcon">
+                ${app.icon}
+            </div>
+
+            <div class="storeInfo">
+
+                <div class="storeName">
+                    ${app.name}
+                </div>
+
+                <div class="storeDescription">
+                    ${app.description}
+                </div>
+
+            </div>
+
+            <button
+                class="
+                    storeButton
+                    ${installed
+                        ? "installed"
+                        : ""}
+                "
+                data-app-id="${app.id}"
+            >
+                ${installed
+                    ? "Открыть"
+                    : "Установить"}
+            </button>
+
+        `;
+
+
+        const button =
+            card.querySelector(
+                ".storeButton"
+            );
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                if (installed) {
+
+                    openApp(
+                        app.window
+                    );
+
+                }
+
+                else {
+
+                    installApplication(
+                        app.id
+                    );
+
+                }
+
+            }
+        );
+
+
+        list.appendChild(
+            card
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   STORE SEARCH
+   ========================================================= */
+
+function filterStore() {
+
+    const query =
+        document.getElementById(
+            "storeSearch"
+        ).value
+         .toLowerCase()
+         .trim();
+
+
+    document
+        .querySelectorAll(
+            ".storeApp"
+        )
+        .forEach(card => {
+
+            const text =
+                card.textContent
+                    .toLowerCase();
+
+
+            card.style.display =
+                text.includes(query)
+                    ? "flex"
+                    : "none";
+
+        });
+
+}
+
+
+/* =========================================================
+   APPLICATION INSTALLATION
+   ========================================================= */
+
+let installing =
+    false;
+
+
+function installApplication(
+    appId
+) {
+
+    if (installing) {
+
+        showToast(
+            "Уже идёт установка"
+        );
+
+        return;
+
+    }
+
+
+    const app =
+        applications[appId];
+
+
+    if (!app) {
+
+        return;
+
+    }
+
+
+    installing =
+        true;
+
+
+    const overlay =
+        document.getElementById(
+            "installOverlay"
+        );
+
+
+    const icon =
+        document.getElementById(
+            "installIcon"
+        );
+
+
+    const name =
+        document.getElementById(
+            "installName"
+        );
+
+
+    const status =
+        document.getElementById(
+            "installStatus"
+        );
+
+
+    const bar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    const percent =
+        document.getElementById(
+            "progressPercent"
+        );
+
+
+    icon.textContent =
+        app.icon;
+
+
+    name.textContent =
+        app.name;
+
+
+    status.textContent =
+        "Подготовка к установке...";
+
+
+    bar.style.width =
+        "0%";
+
+
+    percent.textContent =
+        "0%";
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+
+    playSound(
+        600,
+        .08
+    );
+
+
+    /*
+       Настоящий таймер установки
+       25 секунд.
+    */
+
+    const totalTime =
+        25000;
+
+
+    const start =
+        Date.now();
+
+
+    const timer =
+        setInterval(
+            () => {
+
+                const elapsed =
+                    Date.now() - start;
+
+
+                let progress =
+                    Math.floor(
+                        (elapsed /
+                        totalTime) *
+                        100
+                    );
+
+
+                if (progress > 100) {
+
+                    progress =
+                        100;
+
+                }
+
+
+                bar.style.width =
+                    progress + "%";
+
+
+                percent.textContent =
+                    progress + "%";
+
+
+                if (
+                    progress < 20
+                ) {
+
+                    status.textContent =
+                        "Подключение к RandPlus...";
+
+                }
+
+                else if (
+                    progress < 45
+                ) {
+
+                    status.textContent =
+                        "Загрузка приложения...";
+
+                }
+
+                else if (
+                    progress < 70
+                ) {
+
+                    status.textContent =
+                        "Проверка файлов...";
+
+                }
+
+                else if (
+                    progress < 95
+                ) {
+
+                    status.textContent =
+                        "Установка компонентов...";
+
+                }
+
+                else {
+
+                    status.textContent =
+                        "Завершение установки...";
+
+                }
+
+
+                if (
+                    progress >= 100
+                ) {
+
+                    clearInterval(
+                        timer
+                    );
+
+
+                    state.installed[
+                        appId
+                    ] = true;
+
+
+                    saveState();
+
+
+                    setTimeout(
+                        () => {
+
+                            overlay.classList.remove(
+                                "show"
+                            );
+
+
+                            installing =
+                                false;
+
+
+                            renderHome();
+
+                            renderStore();
+
+
+                            showNotification(
+                                app.name,
+                                "Приложение установлено"
+                            );
+
+
+                            playSound(
+                                850,
+                                .12
+                            );
+
+                        },
+                        600
+                    );
+
+                }
+
+            },
+            100
+        );
+
+}
+
+
+/* =========================================================
+   UNINSTALL
+   ========================================================= */
+
+function uninstallApplication(
+    appId
+) {
+
+    if (
+        !applications[appId]
+    ) {
+
+        return;
+
+    }
+
+
+    state.installed[
+        appId
+    ] = false;
+
+
+    saveState();
+
+
+    renderHome();
+
+    renderStore();
+
+
+    showToast(
+        applications[appId].name +
+        " удалён"
+    );
+
+}
+
+
+/* =========================================================
+   CODE EDITOR
+   ========================================================= */
+
+const CODE_KEY =
+    "radamand_codkey_project";
+
+
+function loadCode() {
+
+    const saved =
+        localStorage.getItem(
+            CODE_KEY
+        );
+
+
+    if (saved) {
+
+        document.getElementById(
+            "codeEditor"
+        ).value =
+            saved;
+
+    }
+
+}
+
+
+function saveCode() {
+
+    const code =
+        document.getElementById(
+            "codeEditor"
+        ).value;
+
+
+    localStorage.setItem(
+        CODE_KEY,
+        code
+    );
+
+
+    playSound(
+        700,
+        .06
+    );
+
+
+    showToast(
+        "Проект сохранён"
+    );
+
+
+    showNotification(
+        "CodKey+",
+        "Проект сохранён"
+    );
+
+}
+
+
+function clearCode() {
+
+    const editor =
+        document.getElementById(
+            "codeEditor"
+        );
+
+
+    editor.value =
+        "";
+
+
+    showToast(
+        "Редактор очищен"
+    );
+
+}
+
+
+loadCode();
+
+
+/* =========================================================
+   ROBOTALIM
+   ========================================================= */
+
+function sendRobotMessage() {
+
+    const input =
+        document.getElementById(
+            "robotInput"
+        );
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+
+        return;
+
+    }
+
+
+    input.value =
+        "";
+
+
+    const message =
+        text.toLowerCase();
+
+
+    let answer =
+        "Я пока не знаю, как выполнить эту команду.";
+
+
+    if (
+        message.includes(
+            "привет"
+        )
+    ) {
+
+        answer =
+            "Привет! Я Robotalim. 🤖";
+
+    }
+
+
+    else if (
+        message.includes(
+            "настрой"
+        )
+    ) {
+
+        answer =
+            "Открываю настройки.";
+
+        openApp(
+            "settings"
+        );
+
+    }
+
+
+    else if (
+        message.includes(
+            "codkey"
+        )
+    ) {
+
+        answer =
+            "Открываю CodKey+.";
+
+        openApp(
+            "code"
+        );
+
+    }
+
+
+    else if (
+        message.includes(
+            "qlinux"
+        )
+    ) {
+
+        answer =
+            "Открываю Qlinux.";
+
+        openApp(
+            "qlinux"
+        );
+
+    }
+
+
+    else if (
+        message.includes(
+            "карта"
+        )
+    ) {
+
+        answer =
+            "Открываю BananaCipr.";
+
+        openApp(
+            "map"
+        );
+
+    }
+
+
+    else if (
+        message.includes(
+            "магазин"
+        )
+    ) {
+
+        answer =
+            "Открываю RandPlus.";
+
+        openApp(
+            "store"
+        );
+
+    }
+
+
+    document.getElementById(
+        "robotMessage"
+    ).innerHTML =
+        answer;
+
+
+    speak(
+        answer
+    );
+
+}
+
+
+/* =========================================================
+   TEXT TO SPEECH
+   ========================================================= */
+
+function speak(
+    text
+) {
+
+    if (
+        !state.sound
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !("speechSynthesis"
+        in window)
+    ) {
+
+        return;
+
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const voice =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    voice.lang =
+        "ru-RU";
+
+
+    voice.rate =
+        1;
+
+
+    voice.pitch =
+        1;
+
+
+    speechSynthesis.speak(
+        voice
+    );
+
+}
+
+
+/* =========================================================
+   BROWSER
+   ========================================================= */
+
+function openBrowser() {
+
+    const input =
+        document.getElementById(
+            "browserInput"
+        );
+
+
+    let value =
+        input.value.trim();
+
+
+    if (!value) {
+
+        return;
+
+    }
+
+
+    if (
+        !value.startsWith(
+            "http://"
+        ) &&
+        !value.startsWith(
+            "https://"
+        )
+    ) {
+
+        value =
+            "https://" + value;
+
+    }
+
+
+    const page =
+        document.getElementById(
+            "browserPage"
+        );
+
+
+    page.innerHTML = `
+
+        <h2>
+            🌐 Radamand Browser
+        </h2>
+
+        <p
+            style="
+                margin-top:15px;
+                opacity:.5;
+                line-height:1.5;
+            "
+        >
+            Переход на:
+            <br>
+            ${escapeHTML(value)}
+        </p>
+
+        <button
+            onclick="
+                window.open(
+                    '${escapeAttribute(value)}',
+                    '_blank'
+                )
+            "
+            style="
+                margin-top:20px;
+                padding:12px 16px;
+                border-radius:13px;
+                background:#315fff;
+                cursor:pointer;
+            "
+        >
+            Открыть сайт
+        </button>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SECURITY HELPERS
+   ========================================================= */
+
+function escapeHTML(
+    text
+) {
+
+    return text
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function escapeAttribute(
+    text
+) {
+
+    return text
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+function showNotification(
+    title,
+    message
+) {
+
+    const container =
+        document.getElementById(
+            "notificationContainer"
+        );
+
+
+    const notification =
+        document.createElement(
+            "div"
+        );
+
+
+    notification.className =
+        "notification";
+
+
+    notification.innerHTML = `
+
+        <div class="notificationTitle">
+            ${escapeHTML(title)}
+        </div>
+
+        <div class="notificationText">
+            ${escapeHTML(message)}
+        </div>
+
+    `;
+
+
+    container.appendChild(
+        notification
+    );
+
+
+    playSound(
+        800,
+        .08
+    );
+
+
+    setTimeout(
+        () => {
+
+            notification.style.opacity =
+                "0";
+
+            notification.style.transform =
+                "translateY(-15px)";
+
+
+            setTimeout(
+                () => {
+
+                    notification.remove();
+
+                },
+                300
+            );
+
+        },
+        3500
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+
+function showToast(
+    message
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* =========================================================
+   SWIPE / NAVIGATION
+   ========================================================= */
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+
+document
+    .getElementById("home")
+    .addEventListener(
+        "touchstart",
+        event => {
+
+            if (
+                event.target.closest(
+                    ".app"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            touchStartX =
+                event.touches[0].clientX;
+
+
+            touchStartY =
+                event.touches[0].clientY;
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+document
+    .getElementById("home")
+    .addEventListener(
+        "touchend",
+        event => {
+
+            const endX =
+                event.changedTouches[0].clientX;
+
+
+            const endY =
+                event.changedTouches[0].clientY;
+
+
+            const dx =
+                endX - touchStartX;
+
+
+            const dy =
+                endY - touchStartY;
+
+
+            if (
+                Math.abs(dx) > 80 &&
+                Math.abs(dx) >
+                Math.abs(dy)
+            ) {
+
+                showToast(
+                    dx < 0
+                        ? "Следующий экран"
+                        : "Предыдущий экран"
+                );
+
+                playSound(
+                    420,
+                    .04
+                );
+
+            }
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+/* =========================================================
+   HOME BUTTON / ESC
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closeApp();
+
+            closeControlCenter();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+function initializeRadamand() {
+
+    loadState();
+
+    initializeApplications();
+
+    renderHome();
+
+    renderStore();
+
+    applyWallpaper();
+
+
+    document
+        .getElementById(
+            "wifiButton"
+        )
+        .classList.toggle(
+            "active",
+            state.wifi
+        );
+
+
+    document
+        .getElementById(
+            "soundButton"
+        )
+        .classList.toggle(
+            "active",
+            state.sound
+        );
+
+
+    document
+        .getElementById(
+            "darkButton"
+        )
+        .classList.toggle(
+            "active",
+            state.dark
+        );
+
+
+    document.getElementById(
+        "soundStatus"
+    ).textContent =
+        state.sound
+            ? "Включены"
+            : "Выключены";
+
+
+    document.getElementById(
+        "darkStatus"
+    ).textContent =
+        state.dark
+            ? "Включена"
+            : "Выключена";
+
+
+    document.getElementById(
+        "networkIcon"
+    ).textContent =
+        state.wifi
+            ? "📶"
+            : "❌";
+
+}
+
+
+initializeRadamand();
+
+
+/* =========================================================
+   WELCOME NOTIFICATION
+   ========================================================= */
+
+setTimeout(
+    () => {
+
+        if (!state.locked) {
+
+            showNotification(
+                "Radamand",
+                "Добро пожаловать!"
+            );
+
+        }
+
+    },
+    1500
+);
+
+</script>
+
+</body>
+</html>
